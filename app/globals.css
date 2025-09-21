@@ -105,18 +105,19 @@
 /* Testimonials avatar animations (subtle, inspired by footer pulse) */
 @keyframes testimonial-float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+  50% { transform: translateY(-6px); }
 }
 @keyframes testimonial-glow {
   0%, 100% { opacity: 0.25; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(1.06); }
+  50% { opacity: 0.6; transform: scale(1.12); }
 }
-.animate-float-slow {
-  animation: testimonial-float 5s ease-in-out infinite;
+@keyframes testimonial-ring {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(1.15); }
 }
-.animate-testimonial-glow {
-  animation: testimonial-glow 3.5s ease-in-out infinite;
-}
+.animate-float-slow { animation: testimonial-float 4.5s ease-in-out infinite; }
+.animate-testimonial-glow { animation: testimonial-glow 3s ease-in-out infinite; }
+.animate-testimonial-ring { animation: testimonial-ring 2.8s ease-in-out infinite; }
 
 /* Custom gradient backgrounds for hero sections */
 .hero-gradient {
