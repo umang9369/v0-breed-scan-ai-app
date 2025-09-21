@@ -27,48 +27,42 @@ export function BreedIdentificationInterface() {
   const [showFeedback, setShowFeedback] = useState(false)
   const [processingProgress, setProcessingProgress] = useState(0)
 
-  // Extract predictions from various possible Roboflow workflow response shapes
+  // Extract predictions directly from Roboflow response (no custom aggregation/sorting)
   const derivePredictions = useCallback((raw: any): BreedPrediction[] => {
-    const scores = new Map<string, number>()
+    const isPred = (x: any) =>
+      x && typeof x === "object" &&
+      (x.class != null || x.label != null || x.name != null || x.breed != null) &&
+      (x.confidence != null || x.score != null || x.probability != null)
 
-    const record = (name: unknown, conf: unknown) => {
-      const breed = typeof name === "string" ? name.trim() : undefined
-      const c = typeof conf === "number" ? conf : undefined
-      if (!breed || c == null || Number.isNaN(c)) return
-      const prev = scores.get(breed) ?? 0
-      if (c > prev) scores.set(breed, c)
-    }
-
-    const visit = (node: any) => {
-      if (!node) return
+    const extractList = (node: any): any[] | null => {
+      if (!node) return null
       if (Array.isArray(node)) {
-        node.forEach(visit)
-        return
+        if (node.length > 0 && node.every(isPred)) return node
+        for (const item of node) {
+          const found = extractList(item)
+          if (found) return found
+        }
+        return null
       }
       if (typeof node === "object") {
-        // Common patterns
-        if (Array.isArray((node as any).predictions)) visit((node as any).predictions)
-        if (Array.isArray((node as any).classifications)) visit((node as any).classifications)
-        if ((node as any).results) visit((node as any).results)
-        if ((node as any).output) visit((node as any).output)
-        if ((node as any).data) visit((node as any).data)
-        if ((node as any).steps) visit((node as any).steps)
-        if ((node as any).models) visit((node as any).models)
-
-        const name = (node as any).class ?? (node as any).label ?? (node as any).name ?? (node as any).breed
-        const conf = (node as any).confidence ?? (node as any).score ?? (node as any).probability
-        if (name != null && conf != null) record(name, conf)
-
-        for (const v of Object.values(node)) visit(v)
+        const keys = ["predictions", "classifications", "results", "output", "data"]
+        for (const k of keys) {
+          const v = (node as any)[k]
+          if (Array.isArray(v) && v.length > 0 && v.every(isPred)) return v
+        }
+        for (const v of Object.values(node)) {
+          const found = extractList(v)
+          if (found) return found
+        }
       }
+      return null
     }
 
-    visit(raw)
-
-    return Array.from(scores.entries())
-      .map(([breed, confidence]) => ({ breed, confidence }))
-      .sort((a, b) => b.confidence - a.confidence)
-      .slice(0, 5)
+    const list = extractList(raw) || []
+    return list.map((p: any) => ({
+      breed: (p.class ?? p.label ?? p.name ?? p.breed) as string,
+      confidence: (p.confidence ?? p.score ?? p.probability) as number,
+    }))
   }, [])
 
   const handleImageUpload = useCallback(async (file: File) => {
