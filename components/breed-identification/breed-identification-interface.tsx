@@ -27,6 +27,50 @@ export function BreedIdentificationInterface() {
   const [showFeedback, setShowFeedback] = useState(false)
   const [processingProgress, setProcessingProgress] = useState(0)
 
+  // Extract predictions from various possible Roboflow workflow response shapes
+  const derivePredictions = useCallback((raw: any): BreedPrediction[] => {
+    const scores = new Map<string, number>()
+
+    const record = (name: unknown, conf: unknown) => {
+      const breed = typeof name === "string" ? name.trim() : undefined
+      const c = typeof conf === "number" ? conf : undefined
+      if (!breed || c == null || Number.isNaN(c)) return
+      const prev = scores.get(breed) ?? 0
+      if (c > prev) scores.set(breed, c)
+    }
+
+    const visit = (node: any) => {
+      if (!node) return
+      if (Array.isArray(node)) {
+        node.forEach(visit)
+        return
+      }
+      if (typeof node === "object") {
+        // Common patterns
+        if (Array.isArray((node as any).predictions)) visit((node as any).predictions)
+        if (Array.isArray((node as any).classifications)) visit((node as any).classifications)
+        if ((node as any).results) visit((node as any).results)
+        if ((node as any).output) visit((node as any).output)
+        if ((node as any).data) visit((node as any).data)
+        if ((node as any).steps) visit((node as any).steps)
+        if ((node as any).models) visit((node as any).models)
+
+        const name = (node as any).class ?? (node as any).label ?? (node as any).name ?? (node as any).breed
+        const conf = (node as any).confidence ?? (node as any).score ?? (node as any).probability
+        if (name != null && conf != null) record(name, conf)
+
+        for (const v of Object.values(node)) visit(v)
+      }
+    }
+
+    visit(raw)
+
+    return Array.from(scores.entries())
+      .map(([breed, confidence]) => ({ breed, confidence }))
+      .sort((a, b) => b.confidence - a.confidence)
+      .slice(0, 5)
+  }, [])
+
   const handleImageUpload = useCallback(async (file: File) => {
     const imageUrl = URL.createObjectURL(file)
     setCurrentImage(imageUrl)
@@ -35,35 +79,37 @@ export function BreedIdentificationInterface() {
     setScanResult(null)
     setShowFeedback(false)
 
-    // Simulate AI processing with progress updates
     const progressInterval = setInterval(() => {
       setProcessingProgress((prev) => {
         if (prev >= 90) {
           clearInterval(progressInterval)
           return 90
         }
-        return prev + Math.random() * 15
+        return Math.min(90, prev + Math.random() * 15)
       })
     }, 200)
 
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      const form = new FormData()
+      form.append("image", file)
 
-      // Mock AI predictions - in real app, this would call your ML API
-      const mockPredictions: BreedPrediction[] = [
-        { breed: "Gir", confidence: 0.8945 },
-        { breed: "Sahiwal", confidence: 0.0623 },
-        { breed: "Red Sindhi", confidence: 0.0432 },
-        { breed: "Tharparkar", confidence: 0.0234 },
-        { breed: "Hariana", confidence: 0.0156 },
-      ]
+      const response = await fetch("/api/roboflow", { method: "POST", body: form })
+      const json = await response.json()
+
+      if (!response.ok || !json?.success) {
+        throw new Error(json?.error || "Roboflow request failed")
+      }
+
+      const predictions = derivePredictions(json.data)
+      if (!predictions || predictions.length === 0) {
+        throw new Error("No predictions found in response")
+      }
 
       const result: ScanResult = {
         id: `scan_${Date.now()}`,
         imageUrl,
-        predictions: mockPredictions,
-        confidence: mockPredictions[0].confidence,
+        predictions,
+        confidence: predictions[0].confidence,
         timestamp: new Date().toISOString(),
         status: "completed",
       }
@@ -84,7 +130,7 @@ export function BreedIdentificationInterface() {
       clearInterval(progressInterval)
       setIsProcessing(false)
     }
-  }, [])
+  }, [derivePredictions])
 
   const handleNewScan = () => {
     setCurrentImage(null)
