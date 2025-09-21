@@ -102,6 +102,22 @@
   transition: colors 0.2s ease-in-out;
 }
 
+/* Testimonials avatar animations (subtle, inspired by footer pulse) */
+@keyframes testimonial-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes testimonial-glow {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(1.06); }
+}
+.animate-float-slow {
+  animation: testimonial-float 5s ease-in-out infinite;
+}
+.animate-testimonial-glow {
+  animation: testimonial-glow 3.5s ease-in-out infinite;
+}
+
 /* Custom gradient backgrounds for hero sections */
 .hero-gradient {
   background: linear-gradient(135deg, rgb(var(--background)) 0%, rgb(15 15 35) 50%, rgb(var(--background)) 100%);
