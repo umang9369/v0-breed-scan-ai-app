@@ -71,11 +71,12 @@ export function TestimonialsSection() {
                 {/* Author */}
                 <div className="flex items-center space-x-3 pt-4 border-t border-border">
                   <div className="relative w-12 h-12">
-                    <span aria-hidden className="absolute inset-0 rounded-full bg-primary/15 blur-lg animate-testimonial-glow" />
+                    <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full bg-primary/20 blur-xl animate-testimonial-glow z-0" />
+                    <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-primary/30 animate-testimonial-ring z-0" />
                     <img
                       src={testimonial.avatar || "/placeholder.svg"}
                       alt={testimonial.name}
-                      className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20 animate-float-slow"
+                      className="relative z-10 w-12 h-12 rounded-full object-cover ring-2 ring-primary/20 animate-float-slow will-change-transform"
                     />
                   </div>
                   <div>
