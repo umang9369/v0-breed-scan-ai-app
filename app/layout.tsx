@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+import { BackgroundPaths } from "@/components/ui/background-paths"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,7 +31,16 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
-      <body className="min-h-screen bg-background text-foreground font-sans">{children}</body>
+      <body className="min-h-screen bg-background text-foreground font-sans">
+        {/* Global subtle animated background */}
+        <div className="fixed inset-0 -z-10 pointer-events-none">
+          {/* gradient retains original look under animation */}
+          <div className="absolute inset-0 bg-gradient-to-br from-background via-background/90 to-background" />
+        </div>
+        {/* Animated SVG paths */}
+        <BackgroundPaths />
+        <div className="relative z-10">{children}</div>
+      </body>
     </html>
   )
 }
