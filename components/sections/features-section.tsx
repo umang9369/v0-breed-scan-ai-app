@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Camera, Video, Wifi, MessageSquare, BarChart3, Shield, ArrowRight, CheckCircle } from "lucide-react"
 import Link from "next/link"
+import { GlowCard } from "@/components/ui/spotlight-card"
 
 export function FeaturesSection() {
   const features = [
@@ -110,8 +111,7 @@ export function FeaturesSection() {
               </Card>
               <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl">
                 {/** Spotlight overlay renders behind card while preserving original styles */}
-                {/* @ts-expect-error client component */}
-                {require("@/components/ui/spotlight-card").GlowCard({ customSize: true, className: "h-full w-full rounded-2xl" })}
+                <GlowCard customSize className="h-full w-full rounded-2xl" />
               </div>
             </div>
           ))}
