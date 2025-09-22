@@ -39,17 +39,30 @@ const GlowCard: React.FC<GlowCardProps> = ({
   const innerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const syncPointer = (e: PointerEvent) => {
-      const { clientX: x, clientY: y } = e
-      if (cardRef.current) {
-        cardRef.current.style.setProperty("--x", x.toFixed(2))
-        cardRef.current.style.setProperty("--xp", (x / window.innerWidth).toFixed(2))
-        cardRef.current.style.setProperty("--y", y.toFixed(2))
-        cardRef.current.style.setProperty("--yp", (y / window.innerHeight).toFixed(2))
-      }
+    const mq = window.matchMedia("(max-width: 768px)")
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)")
+    let raf = 0
+    let latestX = 0
+    let latestY = 0
+    const update = () => {
+      raf = 0
+      if (!cardRef.current) return
+      cardRef.current.style.setProperty("--x", latestX.toFixed(2))
+      cardRef.current.style.setProperty("--xp", (latestX / window.innerWidth).toFixed(2))
+      cardRef.current.style.setProperty("--y", latestY.toFixed(2))
+      cardRef.current.style.setProperty("--yp", (latestY / window.innerHeight).toFixed(2))
     }
-    document.addEventListener("pointermove", syncPointer)
-    return () => document.removeEventListener("pointermove", syncPointer)
+    const syncPointer = (e: PointerEvent) => {
+      if (mq.matches || reduced.matches) return
+      latestX = e.clientX
+      latestY = e.clientY
+      if (!raf) raf = requestAnimationFrame(update)
+    }
+    document.addEventListener("pointermove", syncPointer, { passive: true })
+    return () => {
+      document.removeEventListener("pointermove", syncPointer)
+      if (raf) cancelAnimationFrame(raf)
+    }
   }, [])
 
   const { base, spread } = glowColorMap[glowColor]
@@ -81,7 +94,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
       backgroundColor: "transparent",
       backgroundSize: "calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)))",
       backgroundPosition: "50% 50%",
-      backgroundAttachment: "fixed",
+      backgroundAttachment: "local",
       border: "var(--border-size) solid var(--backup-border)",
       position: "relative" as const,
       touchAction: "none" as const,
@@ -156,7 +169,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
         ref={cardRef}
         data-glow
         style={getInlineStyles()}
-        className={`${getSizeClasses()} ${!customSize ? "aspect-[3/4]" : ""} rounded-2xl relative grid grid-rows-[1fr_auto] p-0 backdrop-blur-[5px] ${className}`}
+        className={`${getSizeClasses()} ${!customSize ? "aspect-[3/4]" : ""} rounded-2xl relative grid grid-rows-[1fr_auto] p-0 backdrop-blur-[3px] will-change-transform ${className}`}
       >
         <div ref={innerRef} data-glow />
         {children}
