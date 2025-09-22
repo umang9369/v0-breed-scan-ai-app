@@ -1,6 +1,8 @@
 import { Card } from "@/components/ui/card"
 import { Star, Quote } from "lucide-react"
 
+import { Gallery4, type Gallery4Item } from "@/components/ui/gallery4"
+
 export function TestimonialsSection() {
   const testimonials = [
     {
@@ -50,45 +52,26 @@ export function TestimonialsSection() {
           </p>
         </div>
 
-        {/* Testimonials grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {testimonials.map((testimonial) => (
-            <Card key={testimonial.name} className="p-6 hover:shadow-lg transition-shadow">
-              <div className="space-y-4">
-                {/* Quote icon */}
-                <Quote className="w-8 h-8 text-primary/30" />
-
-                {/* Rating */}
-                <div className="flex space-x-1">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-
-                {/* Content */}
-                <p className="text-muted-foreground italic">"{testimonial.content}"</p>
-
-                {/* Author */}
-                <div className="flex items-center space-x-3 pt-4 border-t border-border">
-                  <div className="relative w-12 h-12">
-                    <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full bg-primary/20 blur-xl animate-testimonial-glow z-0" />
-                    <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-primary/30 animate-testimonial-ring z-0" />
-                    <img
-                      src={testimonial.avatar || "/placeholder.svg"}
-                      alt={testimonial.name}
-                      className="relative z-10 w-12 h-12 rounded-full object-cover ring-2 ring-primary/20 animate-float-slow will-change-transform"
-                    />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">{testimonial.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {testimonial.role} • {testimonial.location}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))}
+        {/* Testimonials carousel (uses same data) */}
+        <div className="mb-16">
+          {
+            (() => {
+              const items: Gallery4Item[] = testimonials.map((t) => ({
+                id: t.name,
+                title: `${t.name} — ${t.role}`,
+                description: t.content,
+                href: "#",
+                image: t.avatar || "/placeholder.svg",
+              }))
+              return (
+                <Gallery4
+                  title="Success Stories"
+                  description="Real stories from farmers and FLWs using BreedScan AI"
+                  items={items}
+                />
+              )
+            })()
+          }
         </div>
 
         {/* Impact statistics */}
