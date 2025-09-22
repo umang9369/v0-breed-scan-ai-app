@@ -109,7 +109,7 @@ export function FeaturesSection() {
                   </div>
                 </div>
               </Card>
-              <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl">
+              <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl hidden md:block">
                 {/** Spotlight overlay renders behind card while preserving original styles */}
                 <GlowCard customSize className="h-full w-full rounded-2xl" />
               </div>
