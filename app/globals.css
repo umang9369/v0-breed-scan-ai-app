@@ -115,9 +115,12 @@
   0%, 100% { opacity: 0.15; transform: scale(1); }
   50% { opacity: 0.35; transform: scale(1.15); }
 }
-.animate-float-slow { animation: testimonial-float 4.5s ease-in-out infinite; }
-.animate-testimonial-glow { animation: testimonial-glow 3s ease-in-out infinite; }
-.animate-testimonial-ring { animation: testimonial-ring 2.8s ease-in-out infinite; }
+.animate-float-slow { animation: testimonial-float 6s ease-in-out infinite; }
+.animate-testimonial-glow { animation: testimonial-glow 4s ease-in-out infinite; }
+.animate-testimonial-ring { animation: testimonial-ring 3.6s ease-in-out infinite; }
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+  .animate-float-slow, .animate-testimonial-glow, .animate-testimonial-ring { animation: none; }
+}
 
 /* Custom gradient backgrounds for hero sections */
 .hero-gradient {
