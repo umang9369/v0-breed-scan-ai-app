@@ -10,10 +10,10 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "BreedScan AI - Intelligent Livestock Management",
+  title: "PashuSuchak AI - Intelligent Livestock Management",
   description: "AI-powered breed identification and heat detection for modern livestock management",
   keywords: "livestock, AI, breed identification, heat detection, farming, agriculture",
-  authors: [{ name: "BreedScan AI Team" }],
+  authors: [{ name: "PashuSuchak AI Team" }],
   viewport: "width=device-width, initial-scale=1",
   themeColor: "#22c55e",
   manifest: "/manifest.json",
