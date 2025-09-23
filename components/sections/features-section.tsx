@@ -122,7 +122,7 @@ export function FeaturesSection() {
           <div className="bg-muted/30 rounded-2xl p-8">
             <h3 className="text-2xl font-bold text-foreground mb-4">Ready to Transform Your Livestock Management?</h3>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Join thousands of farmers already using BreedScan AI to improve their livestock productivity
+              Join thousands of farmers already using PashuSuchak AI to improve their livestock productivity
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild>
