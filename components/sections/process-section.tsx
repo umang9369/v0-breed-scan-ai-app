@@ -85,6 +85,8 @@ export function ProcessSection() {
                 <img
                   src="/workflow-diagram-showing-farmer-using-smartphone-t.jpg"
                   alt="PashuSuchak AI workflow diagram"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-auto rounded-lg"
                 />
               </div>
