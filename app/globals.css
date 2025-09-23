@@ -97,9 +97,16 @@
   background: rgb(var(--muted-foreground));
 }
 
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
 /* Smooth animations */
-* {
-  transition: colors 0.2s ease-in-out;
+* { transition: colors 0.2s ease-in-out; }
+
+/* Respect reduced motion preferences globally */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
 /* Testimonials avatar animations (subtle, inspired by footer pulse) */
