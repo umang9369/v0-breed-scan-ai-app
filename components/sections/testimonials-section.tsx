@@ -10,7 +10,7 @@ export function TestimonialsSection() {
       role: "Dairy Farmer",
       location: "Sonipat, Haryana",
       content:
-        "BreedScan AI has transformed how I manage my 25 cattle. The breed identification is incredibly accurate, and the heat detection has improved my breeding success rate by 40%.",
+        "PashuSuchak AI has transformed how I manage my 25 cattle. The breed identification is incredibly accurate, and the heat detection has improved my breeding success rate by 40%.",
       rating: 5,
       avatar: "/indian-farmer-portrait.png",
     },
@@ -48,7 +48,7 @@ export function TestimonialsSection() {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Trusted by Farmers Across India</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Real stories from farmers and livestock workers who are transforming their operations with BreedScan AI
+            Real stories from farmers and livestock workers who are transforming their operations with PashuSuchak AI
           </p>
         </div>
 
@@ -66,7 +66,7 @@ export function TestimonialsSection() {
               return (
                 <Gallery4
                   title="Success Stories"
-                  description="Real stories from farmers and FLWs using BreedScan AI"
+                  description="Real stories from farmers and FLWs using PashuSuchak AI"
                   items={items}
                 />
               )
