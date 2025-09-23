@@ -1,4 +1,4 @@
--- BreedScan AI Database Schema
+-- PashuSuchak AI Database Schema
 -- PostgreSQL database setup for livestock management platform
 
 -- Users table for authentication and role management
