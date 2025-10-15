@@ -1,6 +1,8 @@
 import { Card } from "@/components/ui/card"
 import { Star, Quote } from "lucide-react"
 
+import { Gallery4, type Gallery4Item } from "@/components/ui/gallery4"
+
 export function TestimonialsSection() {
   const testimonials = [
     {
@@ -8,7 +10,7 @@ export function TestimonialsSection() {
       role: "Dairy Farmer",
       location: "Sonipat, Haryana",
       content:
-        "BreedScan AI has transformed how I manage my 25 cattle. The breed identification is incredibly accurate, and the heat detection has improved my breeding success rate by 40%.",
+        "PashuSuchak AI has transformed how I manage my 25 cattle. The breed identification is incredibly accurate, and the heat detection has improved my breeding success rate by 40%.",
       rating: 5,
       avatar: "/indian-farmer-portrait.png",
     },
@@ -46,45 +48,30 @@ export function TestimonialsSection() {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Trusted by Farmers Across India</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Real stories from farmers and livestock workers who are transforming their operations with BreedScan AI
+            Real stories from farmers and livestock workers who are transforming their operations with PashuSuchak AI
           </p>
         </div>
 
-        {/* Testimonials grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {testimonials.map((testimonial) => (
-            <Card key={testimonial.name} className="p-6 hover:shadow-lg transition-shadow">
-              <div className="space-y-4">
-                {/* Quote icon */}
-                <Quote className="w-8 h-8 text-primary/30" />
-
-                {/* Rating */}
-                <div className="flex space-x-1">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-
-                {/* Content */}
-                <p className="text-muted-foreground italic">"{testimonial.content}"</p>
-
-                {/* Author */}
-                <div className="flex items-center space-x-3 pt-4 border-t border-border">
-                  <img
-                    src={testimonial.avatar || "/placeholder.svg"}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <p className="font-semibold text-foreground">{testimonial.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {testimonial.role} • {testimonial.location}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))}
+        {/* Testimonials carousel (uses same data) */}
+        <div className="mb-16">
+          {
+            (() => {
+              const items: Gallery4Item[] = testimonials.map((t) => ({
+                id: t.name,
+                title: `${t.name} — ${t.role}`,
+                description: t.content,
+                href: "#",
+                image: t.avatar || "/placeholder.svg",
+              }))
+              return (
+                <Gallery4
+                  title="Success Stories"
+                  description="Real stories from farmers and FLWs using PashuSuchak AI"
+                  items={items}
+                />
+              )
+            })()
+          }
         </div>
 
         {/* Impact statistics */}

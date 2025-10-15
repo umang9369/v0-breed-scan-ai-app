@@ -38,7 +38,7 @@ export function ProcessSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">How BreedScan AI Works</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">How PashuSuchak AI Works</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Simple 4-step process to revolutionize your livestock management
           </p>
@@ -78,13 +78,15 @@ export function ProcessSection() {
             <div className="text-center">
               <h3 className="text-2xl font-bold text-foreground mb-4">Seamless Integration with Existing Workflows</h3>
               <p className="text-muted-foreground mb-6 max-w-3xl mx-auto">
-                BreedScan AI integrates smoothly with current livestock management practices, requiring minimal training
+                PashuSuchak AI integrates smoothly with current livestock management practices, requiring minimal training
                 and providing immediate value to farmers and field workers.
               </p>
               <div className="bg-background rounded-lg p-6 max-w-4xl mx-auto">
                 <img
                   src="/workflow-diagram-showing-farmer-using-smartphone-t.jpg"
-                  alt="BreedScan AI workflow diagram"
+                  alt="PashuSuchak AI workflow diagram"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-auto rounded-lg"
                 />
               </div>

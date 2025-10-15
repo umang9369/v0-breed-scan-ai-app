@@ -1,4 +1,4 @@
--- Sample data for BreedScan AI platform
+-- Sample data for PashuSuchak AI platform
 -- Insert sample users, animals, and scans for testing
 
 -- Insert sample users (farmers, FLWs, admin)

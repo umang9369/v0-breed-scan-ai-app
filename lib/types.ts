@@ -1,4 +1,4 @@
-// TypeScript type definitions for BreedScan AI
+// TypeScript type definitions for PashuSuchak AI
 
 export interface User {
   id: number

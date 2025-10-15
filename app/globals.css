@@ -97,9 +97,36 @@
   background: rgb(var(--muted-foreground));
 }
 
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
 /* Smooth animations */
-* {
-  transition: colors 0.2s ease-in-out;
+* { transition: colors 0.2s ease-in-out; }
+
+/* Respect reduced motion preferences globally */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Testimonials avatar animations (subtle, inspired by footer pulse) */
+@keyframes testimonial-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes testimonial-glow {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.12); }
+}
+@keyframes testimonial-ring {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(1.15); }
+}
+.animate-float-slow { animation: testimonial-float 6s ease-in-out infinite; }
+.animate-testimonial-glow { animation: testimonial-glow 4s ease-in-out infinite; }
+.animate-testimonial-ring { animation: testimonial-ring 3.6s ease-in-out infinite; }
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+  .animate-float-slow, .animate-testimonial-glow, .animate-testimonial-ring { animation: none; }
 }
 
 /* Custom gradient backgrounds for hero sections */
