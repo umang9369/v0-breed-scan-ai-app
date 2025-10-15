@@ -9,7 +9,8 @@ import { ImageUpload } from "./image-upload"
 import { PredictionResults } from "./prediction-results"
 import { FeedbackForm } from "./feedback-form"
 import { Camera, Upload, Loader2, CheckCircle, AlertCircle } from "lucide-react"
-import type { BreedPrediction } from "@/lib/types"
+import type { BreedPrediction, BackendPredictionResponse } from "@/lib/types"
+import { config } from "@/lib/config"
 
 interface ScanResult {
   id: string
@@ -18,6 +19,9 @@ interface ScanResult {
   confidence: number
   timestamp: string
   status: "processing" | "completed" | "error"
+  ragResponse?: string
+  clarifyingQuestions?: string
+  detection?: any
 }
 
 export function BreedIdentificationInterface() {
@@ -35,7 +39,7 @@ export function BreedIdentificationInterface() {
     setScanResult(null)
     setShowFeedback(false)
 
-    // Simulate AI processing with progress updates
+    // Simulate progress updates during API call
     const progressInterval = setInterval(() => {
       setProcessingProgress((prev) => {
         if (prev >= 90) {
@@ -47,31 +51,48 @@ export function BreedIdentificationInterface() {
     }, 200)
 
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      // Create FormData for file upload
+      const formData = new FormData()
+      formData.append('file', file)
 
-      // Mock AI predictions - in real app, this would call your ML API
-      const mockPredictions: BreedPrediction[] = [
-        { breed: "Gir", confidence: 0.8945 },
-        { breed: "Sahiwal", confidence: 0.0623 },
-        { breed: "Red Sindhi", confidence: 0.0432 },
-        { breed: "Tharparkar", confidence: 0.0234 },
-        { breed: "Hariana", confidence: 0.0156 },
+      // Call the backend API
+      const response = await fetch(config.backendUrl, {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`Server error: ${response.status} ${errorText}`)
+      }
+
+      const backendResponse: BackendPredictionResponse = await response.json()
+
+      // Convert backend response to our format
+      const predictions: BreedPrediction[] = [
+        {
+          breed: backendResponse.breed_prediction.breed,
+          confidence: backendResponse.breed_prediction.confidence
+        }
       ]
 
       const result: ScanResult = {
         id: `scan_${Date.now()}`,
         imageUrl,
-        predictions: mockPredictions,
-        confidence: mockPredictions[0].confidence,
+        predictions,
+        confidence: backendResponse.breed_prediction.confidence,
         timestamp: new Date().toISOString(),
         status: "completed",
+        ragResponse: backendResponse.rag_response,
+        clarifyingQuestions: backendResponse.clarifying_questions,
+        detection: backendResponse.detection,
       }
 
       setProcessingProgress(100)
       setScanResult(result)
       setShowFeedback(true)
     } catch (error) {
+      console.error('Upload error:', error)
       setScanResult({
         id: `scan_${Date.now()}`,
         imageUrl,
@@ -180,7 +201,12 @@ export function BreedIdentificationInterface() {
                   <span className="font-medium text-foreground">Analysis Complete</span>
                   <Badge variant="secondary">{new Date(scanResult.timestamp).toLocaleString()}</Badge>
                 </div>
-                <PredictionResults predictions={scanResult.predictions} />
+                <PredictionResults 
+                  predictions={scanResult.predictions}
+                  ragResponse={scanResult.ragResponse}
+                  clarifyingQuestions={scanResult.clarifyingQuestions}
+                  detection={scanResult.detection}
+                />
               </div>
             </div>
           </Card>

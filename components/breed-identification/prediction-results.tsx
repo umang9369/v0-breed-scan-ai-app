@@ -1,14 +1,17 @@
 import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Trophy, Star } from "lucide-react"
-import type { BreedPrediction } from "@/lib/types"
+import { Trophy, Star, MessageSquare, HelpCircle } from "lucide-react"
+import type { BreedPrediction, BackendPredictionResponse } from "@/lib/types"
 
 interface PredictionResultsProps {
   predictions: BreedPrediction[]
+  ragResponse?: string
+  clarifyingQuestions?: string
+  detection?: any
 }
 
-export function PredictionResults({ predictions }: PredictionResultsProps) {
+export function PredictionResults({ predictions, ragResponse, clarifyingQuestions, detection }: PredictionResultsProps) {
   if (!predictions || predictions.length === 0) {
     return (
       <Card className="p-6">
@@ -79,6 +82,44 @@ export function PredictionResults({ predictions }: PredictionResultsProps) {
               </Card>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* RAG Response */}
+      {ragResponse && (
+        <div className="space-y-3">
+          <div className="flex items-center space-x-2">
+            <MessageSquare className="w-5 h-5 text-blue-500" />
+            <h3 className="text-lg font-semibold text-foreground">AI Explanation</h3>
+          </div>
+          <Card className="p-4 bg-blue-50 border-blue-200">
+            <p className="text-gray-700 whitespace-pre-wrap">{ragResponse}</p>
+          </Card>
+        </div>
+      )}
+
+      {/* Clarifying Questions */}
+      {clarifyingQuestions && (
+        <div className="space-y-3">
+          <div className="flex items-center space-x-2">
+            <HelpCircle className="w-5 h-5 text-orange-500" />
+            <h3 className="text-lg font-semibold text-foreground">Clarifying Questions</h3>
+          </div>
+          <Card className="p-4 bg-orange-50 border-orange-200">
+            <p className="text-gray-700 whitespace-pre-wrap">{clarifyingQuestions}</p>
+          </Card>
+        </div>
+      )}
+
+      {/* Detection Details (Debug) */}
+      {detection && process.env.NODE_ENV === 'development' && (
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-foreground">Detection Details (Debug)</h3>
+          <Card className="p-4 bg-gray-50 border-gray-200">
+            <pre className="text-xs text-gray-700 overflow-auto">
+              {JSON.stringify(detection, null, 2)}
+            </pre>
+          </Card>
         </div>
       )}
 

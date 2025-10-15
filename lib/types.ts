@@ -31,6 +31,17 @@ export interface BreedPrediction {
   confidence: number
 }
 
+// Backend API response types
+export interface BackendPredictionResponse {
+  detection?: any
+  breed_prediction: {
+    breed: string
+    confidence: number
+  }
+  rag_response?: string
+  clarifying_questions?: string
+}
+
 export interface BreedScan {
   id: number
   userId: number

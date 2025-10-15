@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card"
 import { Upload, Camera, ImageIcon } from "lucide-react"
 
 interface ImageUploadProps {
-  onImageUpload: (file: File) => void
+  onImageUpload: (file: File) => Promise<void>
 }
 
 export function ImageUpload({ onImageUpload }: ImageUploadProps) {
@@ -25,7 +25,7 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
   }, [])
 
   const handleDrop = useCallback(
-    (e: React.DragEvent) => {
+    async (e: React.DragEvent) => {
       e.preventDefault()
       e.stopPropagation()
       setDragActive(false)
@@ -33,7 +33,7 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
         const file = e.dataTransfer.files[0]
         if (file.type.startsWith("image/")) {
-          onImageUpload(file)
+          await onImageUpload(file)
         }
       }
     },
@@ -41,11 +41,11 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
   )
 
   const handleFileInput = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files && e.target.files[0]) {
         const file = e.target.files[0]
         if (file.type.startsWith("image/")) {
-          onImageUpload(file)
+          await onImageUpload(file)
         }
       }
     },
@@ -58,10 +58,10 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
     input.type = "file"
     input.accept = "image/*"
     input.capture = "environment" // Use rear camera on mobile
-    input.onchange = (e) => {
+    input.onchange = async (e) => {
       const target = e.target as HTMLInputElement
       if (target.files && target.files[0]) {
-        onImageUpload(target.files[0])
+        await onImageUpload(target.files[0])
       }
     }
     input.click()
