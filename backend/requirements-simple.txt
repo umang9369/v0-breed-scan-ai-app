@@ -1,0 +1,10 @@
+# Simplified requirements for Python 3.14 compatibility
+fastapi
+uvicorn[standard]
+python-multipart
+openai
+requests
+pydantic
+python-dotenv
+pillow
+httpx
