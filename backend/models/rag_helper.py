@@ -17,8 +17,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # OpenAI Configuration
-# Replace with your actual OpenAI API key
-OPENAI_API_KEY = "sk-your-openai-key-here"  # 🔑 REPLACE THIS WITH YOUR ACTUAL KEY
+# Your actual OpenAI API key
+OPENAI_API_KEY = "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"
 
 # Knowledge base path
 KNOWLEDGE_PATH = "backend/models/knowledge/breed_knowledge.txt"

@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Roboflow API Configuration
-# Replace these with your actual Roboflow API keys and model IDs
+# Your actual Roboflow API keys and model IDs
 ROBOFLOW_API_KEY_DETECT = "WJvQbPKZ0YiRywO0hcaK"  # Detection model API key
 ROBOFLOW_API_KEY_BREED = "UP3o92YFIoVdAEpD9qcW"   # Breed classification API key
 
